@@ -17,6 +17,7 @@ import org.elasticsearch.client.RestClient;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Objects;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -29,7 +30,12 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Configuration configuration = readConfiguration(args[1]);
+        if (args.length == 0){
+            logger.error("configuration file missing");
+            System.exit(1);
+        }
+
+        Configuration configuration = readConfiguration(args[0]);
 
         try (ElasticsearchConnection es = new ElasticsearchConnection()) {
 
@@ -68,7 +74,8 @@ public class Main {
     private static Configuration readConfiguration(String yamlFileArg) {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         try {
-            return mapper.readValue(new File(yamlFileArg), Configuration.class);
+            ClassLoader classLoader = Main.class.getClassLoader();
+            return mapper.readValue(new File(classLoader.getResource(yamlFileArg).getFile()), Configuration.class);
         } catch (IOException e) {
             logger.error(e);
             // return empty config
