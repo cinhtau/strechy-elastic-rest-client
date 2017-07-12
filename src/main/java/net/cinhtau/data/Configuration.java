@@ -1,4 +1,4 @@
-package net.cinhtau.config;
+package net.cinhtau.data;
 
 import java.util.Map;
 

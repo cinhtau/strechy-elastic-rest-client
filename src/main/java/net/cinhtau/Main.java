@@ -17,12 +17,12 @@ import org.elasticsearch.client.RestClient;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Objects;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
-import net.cinhtau.config.Configuration;
+import net.cinhtau.data.Configuration;
+import net.cinhtau.util.ConnectionHelper;
 
 public class Main {
 
@@ -35,7 +35,7 @@ public class Main {
             System.exit(1);
         }
 
-        Configuration configuration = readConfiguration(args[0]);
+        Configuration configuration = ConnectionHelper.readConfiguration(args[0]);
 
         try (ElasticsearchConnection es = new ElasticsearchConnection()) {
 
@@ -71,15 +71,4 @@ public class Main {
         }
     }
 
-    private static Configuration readConfiguration(String yamlFileArg) {
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        try {
-            ClassLoader classLoader = Main.class.getClassLoader();
-            return mapper.readValue(new File(classLoader.getResource(yamlFileArg).getFile()), Configuration.class);
-        } catch (IOException e) {
-            logger.error(e);
-            // return empty config
-            return new Configuration();
-        }
-    }
 }
