@@ -14,7 +14,14 @@ import org.apache.logging.log4j.Logger;
 import org.elasticsearch.client.Response;
 import org.elasticsearch.client.RestClient;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
+import net.cinhtau.config.Configuration;
 
 public class Main {
 
@@ -22,13 +29,15 @@ public class Main {
 
     public static void main(String[] args) {
 
+        Configuration configuration = readConfiguration(args[1]);
+
         try (ElasticsearchConnection es = new ElasticsearchConnection()) {
 
             final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
             credentialsProvider.setCredentials(AuthScope.ANY,
-                    new UsernamePasswordCredentials("elastic", "elasticpassword"));
+                    new UsernamePasswordCredentials(configuration.getAuth().get("user"), configuration.getAuth().get("password")));
 
-            HttpHost localhost = new HttpHost("localhost", 9200, "http");
+            HttpHost localhost = new HttpHost(configuration.getHost(), configuration.getPort(), "http");
             RestClient restClient = es.connect(credentialsProvider, localhost);
 
             Response response = restClient.performRequest("GET", "/",
@@ -38,7 +47,7 @@ public class Main {
             //index a document
             HttpEntity entity = new NStringEntity(
                     "{\n" +
-                            "    \"user\" : \"kimchy\",\n" +
+                            "    \"user\" : \"stretch\",\n" +
                             "    \"post_date\" : \"2009-11-15T14:12:12\",\n" +
                             "    \"message\" : \"trying out Elasticsearch\"\n" +
                             "}", ContentType.APPLICATION_JSON);
@@ -53,6 +62,17 @@ public class Main {
 
         } catch (Exception e) {
             logger.error(e);
+        }
+    }
+
+    private static Configuration readConfiguration(String yamlFileArg) {
+        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+        try {
+            return mapper.readValue(new File(yamlFileArg), Configuration.class);
+        } catch (IOException e) {
+            logger.error(e);
+            // return empty config
+            return new Configuration();
         }
     }
 }
