@@ -10,3 +10,6 @@ Usage of the Elasticsearch Java REST Client (Low-level). The High level REST Cli
 
 This project uses the official elasticsearch Java REST Client which is licensed as `http://www.apache.org/licenses/LICENSE-2.0`. 
 
+## Test Data
+
+* JSON Test data generated with [JSON Generator](http://www.json-generator.com)
