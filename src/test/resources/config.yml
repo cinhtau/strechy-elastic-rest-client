@@ -1,7 +1,7 @@
 # Elasticsearch Setup
 ---
-host: localhost
+host: vip-fo-test-es
 port: 9200
 auth:
-  user: elastic
-  password: heart
+  user: monit
+  password: "Z+Z8FZby"
