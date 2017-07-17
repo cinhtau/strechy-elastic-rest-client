@@ -12,7 +12,7 @@ import lombok.Getter;
 
 public class ElasticsearchConnection implements AutoCloseable {
 
-    static final Logger logger = LogManager.getLogger(ElasticsearchConnection.class.getName());
+    static final Logger logger = LogManager.getLogger(ElasticsearchConnection.class);
 
     @Getter
     private RestClient restClient;

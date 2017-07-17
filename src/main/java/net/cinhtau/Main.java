@@ -29,46 +29,46 @@ public class Main {
     static final Logger logger = LogManager.getLogger(Main.class.getName());
 
     public static void main(String[] args) {
-
-        if (args.length == 0){
-            logger.error("configuration file missing");
-            System.exit(1);
-        }
-
-        Configuration configuration = ConnectionHelper.readConfiguration(args[0]);
-
-        try (ElasticsearchConnection es = new ElasticsearchConnection()) {
-
-            final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-            credentialsProvider.setCredentials(AuthScope.ANY,
-                    new UsernamePasswordCredentials(configuration.getAuth().get("user"), configuration.getAuth().get("password")));
-
-            HttpHost localhost = new HttpHost(configuration.getHost(), configuration.getPort(), "http");
-            RestClient restClient = es.connect(credentialsProvider, localhost);
-
-            Response response = restClient.performRequest("GET", "/",
-                    Collections.singletonMap("pretty", "true"));
-            logger.debug(EntityUtils.toString(response.getEntity()));
-
-            //index a document
-            HttpEntity entity = new NStringEntity(
-                    "{\n" +
-                            "    \"user\" : \"stretch\",\n" +
-                            "    \"post_date\" : \"2009-11-15T14:12:12\",\n" +
-                            "    \"message\" : \"trying out Elasticsearch\"\n" +
-                            "}", ContentType.APPLICATION_JSON);
-
-            Response indexResponse = restClient.performRequest(
-                    "PUT",
-                    "/twitter/tweet/1",
-                    Collections.<String, String>emptyMap(),
-                    entity);
-
-            logger.debug("Status {}", indexResponse.getStatusLine());
-
-        } catch (Exception e) {
-            logger.error(e);
-        }
+//
+//        if (args.length == 0){
+//            logger.error("configuration file missing");
+//            System.exit(1);
+//        }
+//
+//        Configuration configuration = ConnectionHelper.readConfiguration(args[0]);
+//
+//        try (ElasticsearchConnection es = new ElasticsearchConnection()) {
+//
+//            final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+//            credentialsProvider.setCredentials(AuthScope.ANY,
+//                    new UsernamePasswordCredentials(configuration.getAuth().get("user"), configuration.getAuth().get("password")));
+//
+//            HttpHost localhost = new HttpHost(configuration.getHost(), configuration.getPort(), "http");
+//            RestClient restClient = es.connect(credentialsProvider, localhost);
+//
+//            Response response = restClient.performRequest("GET", "/",
+//                    Collections.singletonMap("pretty", "true"));
+//            logger.debug(EntityUtils.toString(response.getEntity()));
+//
+//            //index a document
+//            HttpEntity entity = new NStringEntity(
+//                    "{\n" +
+//                            "    \"user\" : \"stretch\",\n" +
+//                            "    \"post_date\" : \"2009-11-15T14:12:12\",\n" +
+//                            "    \"message\" : \"trying out Elasticsearch\"\n" +
+//                            "}", ContentType.APPLICATION_JSON);
+//
+//            Response indexResponse = restClient.performRequest(
+//                    "PUT",
+//                    "/twitter/tweet/1",
+//                    Collections.<String, String>emptyMap(),
+//                    entity);
+//
+//            logger.debug("Status {}", indexResponse.getStatusLine());
+//
+//        } catch (Exception e) {
+//            logger.error(e);
+//        }
     }
 
 }
