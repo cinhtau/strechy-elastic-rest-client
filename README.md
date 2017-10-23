@@ -13,3 +13,7 @@ This project uses the official elasticsearch Java REST Client which is licensed 
 ## Test Data
 
 * JSON Test data generated with [JSON Generator](http://www.json-generator.com)
+
+## TODO
+
+* improve exception handling if index or alias doesn't exists
