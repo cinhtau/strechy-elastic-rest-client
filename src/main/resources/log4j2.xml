@@ -2,8 +2,8 @@
 <Configuration status="WARN">
     <Appenders>
         <Console name="ConsoleAppender" target="SYSTEM_OUT">
-            <PatternLayout
-                    pattern="%d [%t] %-5level %logger{36} - %msg%n%throwable"/>
+            <PatternLayout pattern="%d [%t] %-5level %logger{36} - %msg%n%throwable"/>
+            <!--<PatternLayout pattern="%msg%n%throwable"/>-->
         </Console>
     </Appenders>
     <Loggers>

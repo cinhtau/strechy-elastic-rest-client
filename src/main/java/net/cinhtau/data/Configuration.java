@@ -1,9 +1,9 @@
 package net.cinhtau.data;
 
-import java.util.Map;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Map;
 
 public class Configuration {
     /**
@@ -22,4 +22,8 @@ public class Configuration {
      */
     @Getter @Setter
     private Map<String, String> auth;
+
+    @Getter
+    @Setter
+    private String trustStorePass;
 }

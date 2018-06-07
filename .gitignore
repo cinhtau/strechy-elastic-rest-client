@@ -100,3 +100,6 @@ buildNumber.properties
 
 # project settings
 src/main/resources/test.yml
+
+truststore.jks
+vinh.yml

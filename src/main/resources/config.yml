@@ -5,3 +5,4 @@ port: 9200
 auth:
   user: elastic
   password: heart
+trustStorePass: changeIT

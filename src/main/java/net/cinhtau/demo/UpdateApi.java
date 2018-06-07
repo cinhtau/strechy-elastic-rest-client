@@ -1,10 +1,7 @@
 package net.cinhtau.demo;
 
-import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
+import net.cinhtau.data.Configuration;
+import net.cinhtau.util.ConnectionHelper;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -20,12 +17,15 @@ import org.elasticsearch.action.support.replication.ReplicationResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.rest.RestStatus;
 
-import net.cinhtau.client.ClientBuilder;
-import net.cinhtau.data.Configuration;
-import net.cinhtau.util.ConnectionHelper;
+import java.io.IOException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class UpdateApi {
     private static final Configuration CONFIG = ConnectionHelper.readConfiguration("config.yml");
@@ -38,8 +38,10 @@ public class UpdateApi {
     public static void main(String[] args) throws IOException {
         final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
 
+        Objects.requireNonNull(CONFIG.getAuth(), "no auth data provided");
         String user = CONFIG.getAuth().get("user");
         String password = CONFIG.getAuth().get("password");
+
         String host = CONFIG.getHost();
         int port = CONFIG.getPort();
 
@@ -52,8 +54,13 @@ public class UpdateApi {
                 new UsernamePasswordCredentials(user, password));
 
         HttpHost localhost = new HttpHost(host, port, "http");
-        REST_CLIENT = ClientBuilder.connect(credentialsProvider, localhost);
-        CLIENT = new RestHighLevelClient(REST_CLIENT);
+        RestClientBuilder builder = RestClient.builder(localhost).
+                setHttpClientConfigCallback(httpClientBuilder -> httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider))
+                .setRequestConfigCallback(requestConfigBuilder -> requestConfigBuilder
+                        .setConnectTimeout(5000)
+                        .setSocketTimeout(60000))
+                .setMaxRetryTimeoutMillis(60000);
+        CLIENT = new RestHighLevelClient(builder);
         try {
             createDocument();
             updateDocument();
@@ -65,7 +72,7 @@ public class UpdateApi {
         } catch (IOException e) {
             LOGGER.error(e);
         } finally {
-            REST_CLIENT.close();
+            CLIENT.close();
         }
     }
 
