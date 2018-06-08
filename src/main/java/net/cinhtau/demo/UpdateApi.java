@@ -32,7 +32,6 @@ public class UpdateApi {
 
     private static final Logger LOGGER = LogManager.getLogger(UpdateApi.class);
 
-    private static RestClient REST_CLIENT;
     private static RestHighLevelClient CLIENT;
 
     public static void main(String[] args) throws IOException {

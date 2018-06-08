@@ -50,7 +50,6 @@ public class SearchApi {
 
     private static final Logger LOGGER = LogManager.getLogger(SearchApi.class);
 
-    private static RestClient REST_CLIENT;
     private static RestHighLevelClient CLIENT;
 
     public static void main(String[] args) throws IOException {
@@ -76,7 +75,6 @@ public class SearchApi {
 
         try {
             Path keyStorePath = Paths.get(ClassLoader.getSystemResource("truststore.jks").toURI());
-
 
             KeyStore truststore = KeyStore.getInstance("jks");
             try (InputStream is = Files.newInputStream(keyStorePath)) {
@@ -105,7 +103,7 @@ public class SearchApi {
     }
 
     private static void queryDocument() throws IOException {
-        SearchRequest searchRequest = new SearchRequest("six-audit-2018.06.06");
+        SearchRequest searchRequest = new SearchRequest("six-audit-2018.06.07");
         searchRequest.types("doc");
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
