@@ -4,5 +4,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class CountResponse {
-    @Getter @Setter private int count;
+    private int count;
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
 }

@@ -32,6 +32,8 @@ public class UpdateApi {
 
     private static final Logger LOGGER = LogManager.getLogger(UpdateApi.class);
 
+    private static final String DEFAULT_TYPE = "_doc";
+
     private static RestClient REST_CLIENT;
     private static RestHighLevelClient CLIENT;
 
@@ -79,7 +81,7 @@ public class UpdateApi {
         jsonMap.put("updated", new Date());
         jsonMap.put("reason", "daily update");
         jsonMap.put("amount", 42);
-        UpdateRequest request = new UpdateRequest("posts", "doc", "1").doc(jsonMap);
+        UpdateRequest request = new UpdateRequest("posts", DEFAULT_TYPE,"1").doc(jsonMap);
 
         try {
             UpdateResponse updateResponse = CLIENT.update(request);
@@ -98,7 +100,7 @@ public class UpdateApi {
             }
         } catch (ElasticsearchException e) {
             if (e.status() == RestStatus.CONFLICT) {
-                LOGGER.error("Conflict {}", e);
+                LOGGER.error("Conflict ", e);
             }
             if (e.status() == RestStatus.NOT_FOUND) {
                 LOGGER.error("Document not found");
@@ -118,7 +120,7 @@ public class UpdateApi {
         jsonMap.put("user", "le-mapper");
         jsonMap.put("postDate", new Date());
         jsonMap.put("message", "trying out Elasticsearch");
-        IndexRequest indexRequest = new IndexRequest("posts", "doc", "1").source(jsonMap);
+        IndexRequest indexRequest = new IndexRequest("posts", DEFAULT_TYPE, "1").source(jsonMap);
 
         IndexResponse indexResponse = CLIENT.index(indexRequest);
 
