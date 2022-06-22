@@ -15,7 +15,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <!-- dep version -->
-        <elasticsearch.version>5.6.3</elasticsearch.version>
+        <elasticsearch.version>6.8.15</elasticsearch.version>
         <log4j.version>2.14.1</log4j.version>
         <jackson.version>2.12.1</jackson.version>
         <!-- testing -->
